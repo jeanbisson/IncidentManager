@@ -1,0 +1,80 @@
+﻿@*https://github.com/danpdc/BasicCrudBlazor*@
+
+
+@page "/createProfile"
+@using IncidentManager.Shared
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+
+<h3>Create Profile </h3>
+
+<div class="row">
+    <EditForm Model="@profile" OnValidSubmit="InsertProfile">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label>FirstName:</label>
+            <InputText @bind-Value="profile.FirstName" />
+        </div>
+
+        <div class="form-group">
+            <label>LastName: </label>
+            <InputText @bind-Value="profile.LastName" />
+        </div>
+
+        <div class="form-group">
+            <label>Language:</label>
+            <InputText @bind-Value="profile.Language" />
+        </div>
+
+        <div class="form-group">
+            <label>ProgramBranch: </label>
+            <InputText @bind-Value="profile.ProgramBranchName" />
+        </div>
+
+        <div class="form-group">
+            <label>Role: </label>
+            <InputText @bind-Value="profile.Role" />
+        </div>
+
+
+        <div class="form-group">
+            <label>Location:</label>
+            <InputText @bind-Value="profile.Location" />
+        </div>
+
+        <div class="form-group">
+            <label>LogonSite: </label>
+            <InputText @bind-Value="profile.LogonSite" />
+        </div>
+        <div class="form-group">
+            <label>RemoteWork: </label>
+            <InputCheckbox @bind-Value="profile.RemoteWork" />
+        </div>
+
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-success" value="Create profile" />
+            <NavLink href="Profiles" class="btn btn-info">Back to Profiles</NavLink>
+        </div>
+
+    </EditForm>
+
+</div>
+
+@code {
+    private Profile profile = new Profile();
+
+    protected override void OnInitialized()
+    {
+
+    }
+
+    private async Task InsertProfile()
+    {
+        await Http.PostAsJsonAsync<Profile>("/api/Profile", profile);
+        Navigation.NavigateTo("/Profiles");
+    }
+}

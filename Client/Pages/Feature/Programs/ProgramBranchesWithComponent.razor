@@ -1,0 +1,70 @@
+﻿@page "/ProgramBranchesWithComponent"
+
+@using IncidentManager.Shared
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+
+@if (programBranches == null)
+{
+    <div>loading...</div>
+}
+else
+{
+    <TableComponent Title="Program Branches with component" Items="programBranchesToDisplay" TItem="ProgramBranch">
+        <Columns>
+            <Column ColumnTitle="Id"
+                    filterable="true"
+                    Titem="ProgramBranch"
+                    OnSearchTextChanged="@(e => OnFilterTextChanged(e, "Id"))">
+            </Column>
+            <Column ColumnTitle="Name"
+                    filterable="true"
+                    Titem="ProgramBranch"
+                    OnSearchTextChanged="@(e => OnFilterTextChanged(e, "Name"))">
+            </Column>
+            <Column ColumnTitle="Abbreviation"
+                    filterable="true"
+                    Titem="ProgramBranch"
+                    OnSearchTextChanged="@(e => OnFilterTextChanged(e, "Abbreviation"))">
+            </Column>
+        </Columns>
+        <GridRow Context="ProgramBranch">
+            <td>@ProgramBranch.Id</td>
+            <td>@ProgramBranch.Name</td>
+            <td>@ProgramBranch.Abr</td>
+        </GridRow>
+    </TableComponent>
+}
+
+@code {
+    private List<ProgramBranch> programBranches;
+    private List<ProgramBranch> programBranchesToDisplay;
+
+    protected override async Task OnInitializedAsync()
+    {
+        programBranchesToDisplay = programBranches = await Http.GetFromJsonAsync<List<ProgramBranch>>("/api/ProgramBranch");
+    }
+
+    private void OnFilterTextChanged(ChangeEventArgs changeEventArgs, string columnTitle)
+    {
+        string searchText = changeEventArgs.Value.ToString();
+        //IsGridViewFiltered = true;
+
+        switch (columnTitle)
+        {
+            case "Id":
+                programBranchesToDisplay = programBranches.Where(programBranch => programBranch.Id.ToString().Contains(searchText)).ToList();
+                break;
+            case "Name":
+                programBranchesToDisplay = programBranches.Where(programBranch => programBranch.Name.ToLower().Contains(searchText)).ToList();
+                break;
+            case "Abbreviation":
+                programBranchesToDisplay = programBranches.Where(programBranch => programBranch.Abr.ToLower().Contains(searchText)).ToList();
+                break;
+            default:
+                Console.WriteLine("Default case");
+                break;
+        }
+    }
+}

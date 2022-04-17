@@ -1,0 +1,48 @@
+﻿@*https://github.com/danpdc/BasicCrudBlazor*@
+
+@page "/editprogrambranch/{id:int}"
+
+@using IncidentManager.Shared
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<h3>Update progambranch</h3>
+
+<div class="row">
+    <EditForm Model="@progamBranch" OnValidSubmit="Update">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label>Name: </label>
+            <InputText @bind-Value="progamBranch.Name" />
+        </div>
+
+        <div class="form-group">
+            <label>Abbreviation: </label>
+            <InputText @bind-Value="progamBranch.Abr" />
+        </div>
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-success" value="Update progamBranch" />
+            <NavLink href="ProgramBranches" class="btn btn-info">Back to Program Branches</NavLink>
+        </div>
+
+    </EditForm>
+
+</div>
+@code {
+    private ProgramBranch progamBranch = new ProgramBranch();
+    [Parameter] public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        progamBranch = await Http.GetFromJsonAsync<ProgramBranch>($"/api/ProgramBranch/{Id}");
+    }
+
+    private async Task Update()
+    {
+        await Http.PutAsJsonAsync<ProgramBranch>($"/api/ProgramBranch/{progamBranch.Id}", progamBranch);
+        Navigation.NavigateTo("/programbranches");
+    }
+
+}

@@ -1,0 +1,78 @@
+﻿@page "/Profiles"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using IncidentManager.Shared
+
+
+<h1>Profile</h1>
+
+
+@if (profiles == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Program Branch</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var profile in profiles)
+            {
+            <tr>
+                <td>@profile.Id</td>
+                <td>@profile.FirstName @profile.LastName</td>
+                <td>@profile.Role</td>
+                <td>@profile.ProgramBranchName</td>
+                <td>
+                    <button class="btn btn-danger"
+                            @onclick="(() => DeleteProfile(profile))">
+                        Delete
+                    </button>
+                    <button class="btn btn-info"
+                            @onclick="(() => EditProfile(profile.Id))">
+                        Edit
+                    </button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    <div>
+        <button class="btn btn-success" @onclick="CreateProfile">Create Profile</button>
+    </div>
+}
+
+
+@code {
+    private List<Profile> profiles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        profiles = await Http.GetFromJsonAsync<List<Profile>>("/api/Profile");
+    }
+
+    private async Task DeleteProfile(Profile profile)
+    {
+        await Http.DeleteAsync($"/api/Profile/{profile.Id}");
+        profiles.Remove(profile);
+        StateHasChanged();
+    }
+
+    private void EditProfile(int profileId)
+    {
+        Navigation.NavigateTo("/editprofile/" + profileId);
+    }
+
+    private void CreateProfile()
+    {
+        Navigation.NavigateTo("/createprofile");
+    }
+
+}

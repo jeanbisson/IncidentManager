@@ -1,0 +1,47 @@
+﻿
+@typeparam TItem
+
+
+<h3>@Title</h3>
+
+
+@if (Items == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                @Columns
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Items)
+            {
+                @*<CascadingValue Value="item"></CascadingValue>*@
+                <tr>
+                    @GridRow(item)
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+    @code {
+        [Parameter]
+        public string Title { get; set; }
+
+        [Parameter]
+        public RenderFragment Columns { get; set; }
+
+        [Parameter]
+        public RenderFragment<TItem> GridRow { get; set; }
+
+        [Parameter]
+        public List<TItem> Items { get; set; }
+
+    }

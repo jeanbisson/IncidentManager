@@ -1,0 +1,97 @@
+﻿@page "/Incidents"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using IncidentManager.Shared
+
+
+<h1>Incidents</h1>
+
+
+@if (incidents == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (incidents.Count == 0)
+{
+    <p><em>Got nothing...</em></p>
+
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Application</th>
+                <th>Reporter</th>
+                <th>Date Started</th>
+                <th>Status</th>
+                <th>Importance</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var incident in incidents)
+            {
+                <tr>
+                    <td>@incident.Id</td>
+                    <td>@incident.Application</td>
+                    <td>@incident.Profile.FirstName @incident.Profile.LastName</td>
+                    <td>@incident.DateStarted</td>
+                    <td>@incident.Status</td>
+                    <td>@incident.importance</td>
+
+                    <td>
+                        <button class="btn btn-danger"
+                                @onclick="(() => DeleteIncident(incident))">
+                            Delete
+                        </button>
+                        <button class="btn btn-info"
+                                @onclick="(() => EditIncident(incident.Id))">
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<div>
+    <button class="btn btn-success" @onclick="CreateIncident">Create Incident</button>
+</div>
+
+
+@code {
+    private List<Incident> incidents = new List<Incident>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            incidents = await Http.GetFromJsonAsync<List<Incident>>("/api/incident");
+        }
+        catch
+        {
+            // count 0
+        }
+    }
+
+    private async Task DeleteIncident(Incident incident)
+    {
+        await Http.DeleteAsync($"/api/Incident/{incident.Id}");
+        incidents.Remove(incident);
+        StateHasChanged();
+    }
+
+    private void EditIncident(int id)
+    {
+        Navigation.NavigateTo("/editincident/" + id);
+    }
+
+    private void CreateIncident()
+    {
+        Navigation.NavigateTo("/createincident");
+    }
+
+}

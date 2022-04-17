@@ -1,0 +1,67 @@
+﻿@*https://github.com/danpdc/BasicCrudBlazor*@
+
+@page "/editincident/{id:int}"
+
+@using IncidentManager.Shared
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<h3>Update incident</h3>
+
+<div class="row">
+    <EditForm Model="@incident" OnValidSubmit="Update">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label>FirstName:</label>
+            <InputText @bind-Value="incident.Profile.FirstName" />
+        </div>
+
+        <div class="form-group">
+            <label>LastName: </label>
+            <InputText @bind-Value="incident.Profile.LastName" />
+        </div>
+
+        <div class="form-group">
+            <label>Importance: </label>
+            <InputText @bind-Value="incident.importance" />
+        </div>
+
+        <div class="form-group">
+            <label>Language:</label>
+            <InputText @bind-Value="incident.Description" />
+        </div>
+
+
+
+        <div class="form-group">
+            <label>Status: </label>
+            <InputText @bind-Value="incident.Status" />
+        </div>
+
+
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-success" value="Update incident" />
+            <NavLink href="incidents" class="btn btn-info">Back to incident</NavLink>
+        </div>
+    </EditForm>
+
+</div>
+@code {
+    private Incident incident = new Incident();
+    [Parameter] public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        incident = await Http.GetFromJsonAsync<Incident>($"/api/incident/{Id}");
+    }
+
+    private async Task Update()
+    {
+        await Http.PutAsJsonAsync<Incident>($"/api/Incident/{incident.Id}", incident);
+        Navigation.NavigateTo("/incidents");
+    }
+
+}
