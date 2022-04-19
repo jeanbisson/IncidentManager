@@ -1,0 +1,48 @@
+﻿@typeparam TItem
+
+
+@if (Item == null)
+{
+    <th>@ColumnTitle</th>
+}
+else
+{
+    var property = typeof(TItem).GetProperty(ColumnTitle);
+    <td>@property.GetValue(Item)ToString()</td>
+
+}
+<td>
+    @ColumnTitle
+
+
+
+
+    @if (filterable)
+    {
+
+        <input class="col-md-10" type="search" placeholder="filter" @oninput="OnSearchTextChanged" />
+        <button class="btn col-md-1">On</button>
+        <button class="btn col-md-1">Off</button>
+
+    }
+</td>
+
+@code {
+    [Parameter]
+    public string ColumnTitle { get; set; }
+
+    [Parameter]
+    public bool filterable { get; set; }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs> OnSearchTextChanged { get; set; }
+
+    [Parameter]
+    public string Field { get; set; }
+
+    [CascadingParameter]
+    public TItem Item { get; set; }
+
+    [Parameter]
+    public Func<TItem, bool> filterFunc { get; set; }
+}

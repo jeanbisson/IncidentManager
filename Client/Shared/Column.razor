@@ -1,21 +1,37 @@
-﻿@typeparam Titem
-<th>
-    <div class="col-10 row">
-        @ColumnTitle
-        @if (filterable)
+﻿@typeparam TItem
+   
+        <td>
+
+            @ColumnTitle
+      
+   
+
+   
+        @*@if (filterable)
         {
-            <input class="form-control" placeholder="search" @oninput="OnSearchTextChanged" />
-        }
-    </div>
-</th>
+       
+                <input class="col-md-10" type="search" placeholder="filter" @oninput="OnSearchTextChanged" />
+                <button class="btn col-md-1">On</button>
+                <button class="btn col-md-1">Off</button>
+          
+        }*@
+    </td>
 
-@code {
-    [Parameter]
-    public string ColumnTitle { get; set; }
+    @code {
+        [Parameter]
+        public string ColumnTitle { get; set; }
 
-    [Parameter]
-    public bool filterable { get; set; }
+        [Parameter]
+        public bool filterable { get; set; }
 
-    [Parameter]
-    public EventCallback<ChangeEventArgs> OnSearchTextChanged { get; set; }
-}
+        [Parameter]
+        public EventCallback<ChangeEventArgs> OnSearchTextChanged { get; set; }
+
+        //[Parameter]
+        //public string Field { get; set; }
+
+        //[CascadingParameter] private TableComponent<TItem> Parent { get; set; }
+
+        //protected override void OnInitialized()
+        //    => Parent.AddItem();
+    }

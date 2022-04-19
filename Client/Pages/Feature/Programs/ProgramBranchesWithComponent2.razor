@@ -1,0 +1,82 @@
+﻿@page "/ProgramBranchesWithComponent2"
+
+@using IncidentManager.Shared
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+
+@if (programBranches == null)
+{
+    <div>loading...</div>
+}
+else
+{
+    string a = "a";
+    <TableComponent2 ParentClassName="table-responsive" TableClassName="table table-hover table-striped" HideColumns="Id" DataKeyColumn="Id" Items="programBranches" filterFunc="c => c.Name.ToLower().Contains(a)">
+    </TableComponent2>
+}
+
+@code {
+    private List<ProgramBranch> programBranches;
+    //private List<ProgramBranch> programBranchesToDisplay;
+    //    private Dictionary<string, string> FilterList = new Dictionary<string, string>()
+    //{
+    //        {"Id", "" },
+    //        {"Name", "" },
+    //        {"Abbreviation", "" },
+
+    //    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        programBranches = await Http.GetFromJsonAsync<List<ProgramBranch>>("/api/ProgramBranch");
+
+    }
+
+    //private void OnFilterTextChanged(ChangeEventArgs changeEventArgs, string columnTitle)
+    //{
+    //    string searchText = changeEventArgs.Value.ToString();
+    //    //IsGridViewFiltered = true;
+    //    programBranchesToDisplay = programBranches;
+
+    //    FilterList[columnTitle] = searchText;
+
+    //    foreach (var filter in FilterList)
+    //    {
+    //        if (filter.Value != "")
+    //        {
+    //            if (filter.Key == "Id")
+    //                programBranchesToDisplay = programBranchesToDisplay.Where(programBranch => programBranch.Id.ToString().Contains(filter.Value)).ToList();
+    //            else if (filter.Key == "Name")
+    //                programBranchesToDisplay = programBranchesToDisplay.Where(programBranch => programBranch.Name.ToLower().Contains(filter.Value)).ToList();
+    //            else if (filter.Key == "Abbreviation")
+    //                programBranchesToDisplay = programBranchesToDisplay.Where(programBranch => programBranch.Abr.ToLower().Contains(filter.Value)).ToList();
+
+
+    //        }
+    //}
+
+
+    //switch (columnTitle)
+    //{
+    //    case "Id":
+    //        programBranchesToDisplay = programBranches.Where(programBranch => programBranch.Id.ToString().Contains(searchText)).ToList();
+    //        break;
+    //    case "Name":
+    //        programBranchesToDisplay = programBranches.Where(programBranch => programBranch.Name.ToLower().Contains(searchText)).ToList();
+    //        break;
+    //    case "Abbreviation":
+    //        programBranchesToDisplay = programBranches.Where(programBranch => programBranch.Abr.ToLower().Contains(searchText)).ToList();
+    //        break;
+    //    default:
+    //        Console.WriteLine("Default case");
+    //        break;
+    //}
+
+    private void EditIncident(int id)
+    {
+        Navigation.NavigateTo("/editprogrambranch/" + id);
+    }
+}
+
+

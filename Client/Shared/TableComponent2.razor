@@ -1,0 +1,204 @@
+﻿@typeparam TItem
+@using System.Reflection
+@using System.Linq
+@using System.Linq.Dynamic.Core
+
+
+@if (Items != null)
+{
+    <div class="@ParentClassName">
+        @if (info != null && info.Length > 0)
+        {
+            <table class="@TableClassName">
+                <thead>
+                    <tr>
+                        @foreach (var member in info)
+                        {
+                            if (member.MemberType == MemberTypes.Property && !hideColumns.Contains(member.Name))
+                            {
+                                var a = member.MemberType;
+                                var b = MemberTypes.Property;
+                                <th><a href="javascript:;" @onclick="@(()=>Sort(member.Name))">@member.Name</a></th>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        @foreach (var member in info)
+                        {
+                            if (member.MemberType == MemberTypes.Property && !hideColumns.Contains(member.Name))
+                            {
+                                var a = member.MemberType;
+                                var b = MemberTypes.Property;
+                                <th><input id="@(member.Name + "Filter")" type="search" @oninput="@(e => OnFilterTextChanged(e, @member.Name))" /></th>
+                            }
+                        }
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int index = 0; index < Items.Count; index++)
+                    {
+                        var item = Items[index];
+                        var key = GetDataKey(item);
+                        <tr data-index="@index">
+                            @foreach (var member in info)
+                            {
+                                if (member.MemberType == MemberTypes.Property && !hideColumns.Contains(member.Name))
+                                {
+                                    var c = item.GetType().GetProperty(member.Name).GetValue(item);
+                                    <td data-key="@key">@item.GetType().GetProperty(member.Name).GetValue(item)</td>
+                                }
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public List<TItem> Items { get; set; }
+
+    [Parameter]
+    public string ParentClassName { get; set; }
+
+    [Parameter]
+    public string TableClassName { get; set; }
+
+    private string[] hideColumns = { };
+    [Parameter]
+    public string HideColumns
+    {
+        get
+        {
+            return string.Join(',', hideColumns);
+        }
+
+        set
+        {
+            hideColumns = value.Split(',');
+        }
+    }
+
+    [Parameter]
+    public string DataKeyColumn { get; set; }
+
+    [Parameter]
+    public Func<TItem, bool> filterFunc { get; set; }//filterFunc =item=>item.Name
+
+    private MemberInfo[] info;
+
+    private string GetDataKey(TItem item)
+    {
+        if (!string.IsNullOrEmpty(DataKeyColumn))
+        {
+            foreach (var member in info)
+            {
+                if (member.MemberType == MemberTypes.Property && member.Name == DataKeyColumn)
+                    return item.GetType().GetProperty(member.Name).GetValue(item).ToString();
+            }
+        }
+        return string.Empty;
+    }
+
+    private List<TItem> ItemsToDisplay { get; set; }
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        ItemsToDisplay = Items;
+        if (Items != null && Items.Count > 0)
+        {
+            Type type = Items[0].GetType();
+            info = type.GetMembers();
+
+            var a = Items[0].GetType();
+            var b = a.GetMembers();
+            var c = a.FullName;
+            var d = a.Name;
+            var e = a.GetType();
+
+            var f = Items[0].GetType().Name;
+        }
+    }
+    private string sortedField;
+    private bool descending = true;
+    private void Sort(string field)
+    {
+        if (sortedField == field)
+            descending = !descending;
+        sortedField = field;
+        if (descending)
+        {
+            Items.Sort((a, b) =>
+            {
+                var obj = typeof(TItem).GetProperty(field).GetValue(a);
+                if (obj is DateTime)
+                {
+                    DateTime dta = (DateTime)typeof(TItem).GetProperty(field).GetValue(a);
+                    DateTime dtb = (DateTime)typeof(TItem).GetProperty(field).GetValue(b);
+                    return dta.ToString("yyyyMMddHHmmssfff").CompareTo(dtb.ToString("yyyyMMddHHmmssfff"));
+                }
+                else if (obj is byte || obj is sbyte || obj is short || obj is ushort || obj is int)
+                {
+                    int ia = (int)typeof(TItem).GetProperty(field).GetValue(a);
+                    int ib = (int)typeof(TItem).GetProperty(field).GetValue(b);
+                    return ia - ib;
+                }
+                else
+                {
+                    var ta = typeof(TItem).GetProperty(field).GetValue(a);
+                    var tb = typeof(TItem).GetProperty(field).GetValue(b);
+                    return ta.ToString().CompareTo(tb.ToString());
+                }
+            });
+        }
+        else
+        {
+            Items.Sort((b, a) =>
+            {
+                var obj = typeof(TItem).GetProperty(field).GetValue(a);
+                if (obj is DateTime)
+                {
+                    DateTime dta = (DateTime)typeof(TItem).GetProperty(field).GetValue(a);
+                    DateTime dtb = (DateTime)typeof(TItem).GetProperty(field).GetValue(b);
+                    return dta.ToString("yyyyMMddHHmmssfff").CompareTo(dtb.ToString("yyyyMMddHHmmssfff"));
+                }
+                else if (obj is byte || obj is sbyte || obj is short || obj is ushort || obj is int)
+                {
+                    int ia = (int)typeof(TItem).GetProperty(field).GetValue(a);
+                    int ib = (int)typeof(TItem).GetProperty(field).GetValue(b);
+                    return ia - ib;
+                }
+                else
+                {
+                    var ta = typeof(TItem).GetProperty(field).GetValue(a);
+                    var tb = typeof(TItem).GetProperty(field).GetValue(b);
+                    return ta.ToString().CompareTo(tb.ToString());
+                }
+            });
+        }
+
+
+    }
+
+    private void OnFilterTextChanged(ChangeEventArgs changeEventArgs, string columnTitle)
+    {
+        string searchText = changeEventArgs.Value.ToString();
+        //Func<TItem, bool> aa = new Func<TItem, bool>();
+        //ItemsToDisplay = Items.Where("").ToList();
+        //Func<TItem, bool> testLambda = x=>true;
+        //string idx = Items.FindIndex(x => testLambda(x));
+
+        var query = Items.AsQueryable();
+        query = query.Where("a => a." + columnTitle.ToLower() + ".Contains(\"" + searchText.ToLower() + "\")");
+                    //Where(programBranch => programBranch.Id.ToString().Contains(filter.Value)).ToList();
+        Items = query.ToList();
+        //var a = Items[0].GetType().GetMembers();
+        //var aa = Items.Where(c =>testLambda(c));
+
+    }
+}

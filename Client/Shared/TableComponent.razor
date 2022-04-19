@@ -1,11 +1,13 @@
 ﻿
 @typeparam TItem
+@using System.Reflection
+@using System.Linq.Dynamic.Core
 
 
 <h3>@Title</h3>
 
 
-@if (Items == null)
+@if (ItemsToDisplay == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -14,13 +16,26 @@ else
     <table class="table">
         <thead>
             <tr>
-                @Columns
+                    <CascadingValue Value="this">
+                        @Columns
+                    </CascadingValue>
+                </tr>
+            <tr>
+                @foreach (var member in info)
+                {
+                    if (member.MemberType == MemberTypes.Property)
+                    {
+
+                        <th><input id="@(member.Name + "Filter")" type="search" @oninput="@(e => OnFilterTextChanged(e, @member.Name))" /></th>
+                    }
+                }
             </tr>
+
         </thead>
+
         <tbody>
-            @foreach (var item in Items)
+            @foreach (var item in ItemsToDisplay)
             {
-                @*<CascadingValue Value="item"></CascadingValue>*@
                 <tr>
                     @GridRow(item)
                 </tr>
@@ -31,17 +46,126 @@ else
 
 
 
-    @code {
-        [Parameter]
-        public string Title { get; set; }
+@code {
+    [Parameter]
+    public string Title { get; set; }
 
-        [Parameter]
-        public RenderFragment Columns { get; set; }
+    //[CascadingParameter]
+    //public RenderFragment Columns { get; set; }
 
-        [Parameter]
-        public RenderFragment<TItem> GridRow { get; set; }
+    [Parameter]
+    public RenderFragment Columns { get; set; }
 
-        [Parameter]
-        public List<TItem> Items { get; set; }
+    [Parameter]
+    public RenderFragment<TItem> GridRow { get; set; }
+
+    [Parameter]
+    public List<TItem> Items { get; set; }
+    public List<TItem> ItemsToDisplay { get; set; }
+
+
+    private int ItemCount;
+    private MemberInfo[] info;
+
+    private Dictionary<string, string> Filters = new Dictionary<string, string>();
+
+    public void AddItem()
+    {
+        ItemCount++;
+        StateHasChanged();
+    }
+
+    private bool firstRender = true;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        ItemsToDisplay = Items;
+        if (Items != null && Items.Count > 0)
+        {
+            Type type = Items[0].GetType();
+            info = type.GetMembers();
+
+        }
+
+        if(firstRender)
+        {
+            firstRender = false;
+        @foreach (var member in info)
+        {
+            if (member.MemberType == MemberTypes.Property)
+            {
+                Filters.Add(@member.Name, "");
+            }
+        }
+        }
+    }
+
+    private void OnFilterTextChanged(ChangeEventArgs changeEventArgs, string columnTitle)
+    {
+        string searchText = changeEventArgs.Value.ToString().ToLower();
+        Filters[columnTitle] = searchText;
+
+
+        @*@foreach (var member in info)
+            {
+                if (member.MemberType == MemberTypes.Property)
+                {
+
+
+                    <th><input id="@(member.Name + "Filter")" type="search" oninput="@(e => OnFilterTextChanged(e, @member.Name))" /></th>
+
+
+                }
+            }*@
+
+        //        for (int i = 0; i < Filters.Count; i++)
+        //        {
+        //            if (Filters[i].Value)
+        //}
+
+        var query = Items.AsQueryable();
+
+        foreach (var filter in Filters)
+        {
+            if (filter.Value != "")
+            {
+                var aa = filter.Key.ToLower();
+                var bb = filter.Value.ToLower();
+
+
+                if (filter.Key == "Id")
+                {
+                    query = query.Where("a => a." + filter.Key.ToString() + ".Contains(@0)", 0);
+
+                }
+                //Where(a => a.Id.ToString().Contains(filter.Value)).ToList();
+
+                else
+                {
+                    query = query.Where("a => a." + filter.Key.ToString() + ".Contains(\"" + filter.Value + "\")");
+
+
+                }
+            }
+        }
+        ItemsToDisplay = query.ToList();
+        var a = ItemsToDisplay.Count();
+
+
+        //Func<TItem, bool> aa = new Func<TItem, bool>();
+        //ItemsToDisplay = Items.Where("").ToList();
+        //Func<TItem, bool> testLambda = x=>true;
+        //string idx = Items.FindIndex(x => testLambda(x));
+
+        //var query = Items.AsQueryable();
+        //query = query.Where("a => a." + columnTitle.ToLower() + ".Contains(\"" + searchText.ToLower() + "\")");
+        //Where(programBranch => programBranch.Id.ToString().Contains(filter.Value)).ToList();
+
+        //var a = Items[0].GetType().GetMembers();
+        //var aa = Items.Where(c =>testLambda(c));
 
     }
+}
+}

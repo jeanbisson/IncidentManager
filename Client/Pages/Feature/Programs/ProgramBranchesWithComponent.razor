@@ -11,60 +11,100 @@
 }
 else
 {
-    <TableComponent Title="Program Branches with component" Items="programBranchesToDisplay" TItem="ProgramBranch">
-        <Columns>
-            <Column ColumnTitle="Id"
-                    filterable="true"
-                    Titem="ProgramBranch"
-                    OnSearchTextChanged="@(e => OnFilterTextChanged(e, "Id"))">
-            </Column>
-            <Column ColumnTitle="Name"
-                    filterable="true"
-                    Titem="ProgramBranch"
-                    OnSearchTextChanged="@(e => OnFilterTextChanged(e, "Name"))">
-            </Column>
-            <Column ColumnTitle="Abbreviation"
-                    filterable="true"
-                    Titem="ProgramBranch"
-                    OnSearchTextChanged="@(e => OnFilterTextChanged(e, "Abbreviation"))">
-            </Column>
-        </Columns>
-        <GridRow Context="ProgramBranch">
-            <td>@ProgramBranch.Id</td>
-            <td>@ProgramBranch.Name</td>
-            <td>@ProgramBranch.Abr</td>
-        </GridRow>
-    </TableComponent>
+<TableComponent Title="Program Branches with component" Items="programBranchesToDisplay" TItem="ProgramBranch" Context="ProgramBranch">
+    <Columns>
+        <Column ColumnTitle="Id"
+                filterable="true"
+                TItem="ProgramBranch">
+        </Column>
+        <Column ColumnTitle="Name"
+                filterable="true"
+                TItem="ProgramBranch">
+        </Column>
+        <Column ColumnTitle="Abbreviation"
+                filterable="true"
+                TItem="ProgramBranch">
+        </Column>
+        @*<Column ColumnTitle="Actions" filterable="false"
+                TItem="ProgramBranch">
+        </Column>*@
+
+    </Columns>
+
+    <GridRow Context="ProgramBranch">
+        <td>@ProgramBranch.Id</td>
+        <td>@ProgramBranch.Name</td>
+        <td>@ProgramBranch.Abr</td>
+        <td>
+            <button class="btn btn-info"
+                    @onclick="(() => EditIncident(ProgramBranch.Id))">
+                Edit
+            </button>
+        </td>
+
+    </GridRow>
+</TableComponent>
 }
 
 @code {
     private List<ProgramBranch> programBranches;
     private List<ProgramBranch> programBranchesToDisplay;
+    private Dictionary<string, string> FilterList = new Dictionary<string, string>();
+
 
     protected override async Task OnInitializedAsync()
     {
         programBranchesToDisplay = programBranches = await Http.GetFromJsonAsync<List<ProgramBranch>>("/api/ProgramBranch");
+
     }
 
     private void OnFilterTextChanged(ChangeEventArgs changeEventArgs, string columnTitle)
     {
         string searchText = changeEventArgs.Value.ToString();
         //IsGridViewFiltered = true;
+        programBranchesToDisplay = programBranches;
 
-        switch (columnTitle)
+        FilterList[columnTitle] = searchText;
+
+        foreach (var filter in FilterList)
         {
-            case "Id":
-                programBranchesToDisplay = programBranches.Where(programBranch => programBranch.Id.ToString().Contains(searchText)).ToList();
-                break;
-            case "Name":
-                programBranchesToDisplay = programBranches.Where(programBranch => programBranch.Name.ToLower().Contains(searchText)).ToList();
-                break;
-            case "Abbreviation":
-                programBranchesToDisplay = programBranches.Where(programBranch => programBranch.Abr.ToLower().Contains(searchText)).ToList();
-                break;
-            default:
-                Console.WriteLine("Default case");
-                break;
+            if (filter.Value != "")
+            {
+                if (filter.Key == "Id")
+                    programBranchesToDisplay = programBranchesToDisplay.Where(programBranch => programBranch.Id.ToString().Contains(filter.Value)).ToList();
+                else if (filter.Key == "Name")
+                    programBranchesToDisplay = programBranchesToDisplay.Where(programBranch => programBranch.Name.ToLower().Contains(filter.Value)).ToList();
+                else if (filter.Key == "Abbreviation")
+                    programBranchesToDisplay = programBranchesToDisplay.Where(programBranch => programBranch.Abr.ToLower().Contains(filter.Value)).ToList();
+
+
+            }
         }
+
+
+        //switch (columnTitle)
+        //{
+        //    case "Id":
+        //        programBranchesToDisplay = programBranches.Where(programBranch => programBranch.Id.ToString().Contains(searchText)).ToList();
+        //        break;
+        //    case "Name":
+        //        programBranchesToDisplay = programBranches.Where(programBranch => programBranch.Name.ToLower().Contains(searchText)).ToList();
+        //        break;
+        //    case "Abbreviation":
+        //        programBranchesToDisplay = programBranches.Where(programBranch => programBranch.Abr.ToLower().Contains(searchText)).ToList();
+        //        break;
+        //    default:
+        //        Console.WriteLine("Default case");
+        //        break;
+        //}
+    }
+    //private void EditIncident(int id)
+    //{
+    //    Navigation.NavigateTo("/editprogrambranch/" + id);
+    //}
+
+    private void EditIncident(int programBranchId)
+    {
+        Navigation.NavigateTo("/editprogrambranch/" + programBranchId);
     }
 }
