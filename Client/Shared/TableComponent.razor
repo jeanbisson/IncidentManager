@@ -2,7 +2,7 @@
 @typeparam TItem
 @using System.Reflection
 @using System.Linq.Dynamic.Core
-
+@using IncidentManager.Shared
 
 <h3>@Title</h3>
 
@@ -23,7 +23,7 @@ else
             <tr>
                 @foreach (var member in info)
                 {
-                    if (member.MemberType == MemberTypes.Property)
+                    if (member.MemberType == MemberTypes.Property && columnDetails.Where(c => c.Name.Contains(@member.Name)).Count() > 0)
                     {
 
                         <th><input id="@(member.Name + "Filter")" type="search" @oninput="@(e => OnFilterTextChanged(e, @member.Name))" /></th>
@@ -50,11 +50,14 @@ else
     [Parameter]
     public string Title { get; set; }
 
-    //[CascadingParameter]
-    //public RenderFragment Columns { get; set; }
+    [CascadingParameter]
+    public TableComponent<TItem> myTable { get; set; }
 
     [Parameter]
     public RenderFragment Columns { get; set; }
+
+    [Parameter]
+    public List<ColumnDetails> columnDetails { get; set; }
 
     [Parameter]
     public RenderFragment<TItem> GridRow { get; set; }
@@ -76,6 +79,15 @@ else
     }
 
     private bool firstRender = true;
+
+    protected override void OnInitialized()
+    {
+        //if (myTable != null)
+        //{
+        //    myTable.AddColumn(this);
+
+        //}
+    }
 
     protected override void OnParametersSet()
     {

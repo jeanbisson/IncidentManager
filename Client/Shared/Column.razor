@@ -1,31 +1,32 @@
 ﻿@typeparam TItem
    
-        <td>
+@if(Columns != null)
+            {
+                <CascadingValue Value="this.myTable">
+                    <CascadingValue Value="this">
+                        @Columns
+                    </CascadingValue>
+                </CascadingValue>
+            }
+        @*<td>
 
             @ColumnTitle
       
    
 
    
-        @*@if (filterable)
+        @if (filterable)
         {
        
                 <input class="col-md-10" type="search" placeholder="filter" @oninput="OnSearchTextChanged" />
                 <button class="btn col-md-1">On</button>
                 <button class="btn col-md-1">Off</button>
           
-        }*@
-    </td>
+        }
+    </td>*@
 
     @code {
-        [Parameter]
-        public string ColumnTitle { get; set; }
 
-        [Parameter]
-        public bool filterable { get; set; }
-
-        [Parameter]
-        public EventCallback<ChangeEventArgs> OnSearchTextChanged { get; set; }
 
         //[Parameter]
         //public string Field { get; set; }

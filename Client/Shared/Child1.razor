@@ -1,0 +1,59 @@
+﻿@typeparam TItem
+
+<h3>Child1 (Table)</h3>
+<p>Should sort button and filter input be in TH along with title?</p>
+
+<CascadingValue Value="this">
+    <table class="table" style="border:solid;">
+        <thead>
+            <tr>
+                @ChildContent
+
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Items)
+            {
+                <tr>
+                    @*<td>@programBranch.Id</td>
+                    <td>@programBranch.Name</td>
+                    <td>@programBranch.Abr</td>
+                    <td>
+                        <button class="btn btn-danger"
+                                @onclick="(() => DeleteProgramBranch(programBranch))">
+                            Delete
+                        </button>
+                        <button class="btn btn-info"
+                                @onclick="(() => EditProgramBranch(programBranch.Id))">
+                            Edit
+                        </button>
+                    </td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+</CascadingValue>
+
+
+@*<button @onclick="doSomething(child1String)"></button>*@
+
+@code {
+    private string child1String = "1";
+    public string something = "something";
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public List<TItem> Items { get; set; }
+
+    public void doSomething(string toAppend)
+    {
+        something += toAppend;
+        StateHasChanged();
+    }
+}

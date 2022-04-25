@@ -13,35 +13,44 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Abr</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var programBranch in programBranches)
-            {
+
+    <div style="border:solid;">
+
+        <Child1 Items="programBranches" >
+            <Child2 Name="Id" TItem="ProgramBranch" Filterable="true"></Child2>
+            <Child2 Name="Name" TItem="ProgramBranch" Filterable="true"></Child2>
+            <Child2 Name="Actions" TItem="ProgramBranch" Filterable="false"></Child2>
+        </Child1>
+    </div>
+    @*<table class="table">
+            <thead>
                 <tr>
-                    <td>@programBranch.Id</td>
-                    <td>@programBranch.Name</td>
-                    <td>@programBranch.Abr</td>
-                    <td>
-                        <button class="btn btn-danger"
-                                @onclick="(() => DeleteProgramBranch(programBranch))">
-                            Delete
-                        </button>
-                        <button class="btn btn-info"
-                                @onclick="(() => EditProgramBranch(programBranch.Id))">
-                            Edit
-                        </button>
-                    </td>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Abr</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var programBranch in programBranches)
+                {
+                    <tr>
+                        <td>@programBranch.Id</td>
+                        <td>@programBranch.Name</td>
+                        <td>@programBranch.Abr</td>
+                        <td>
+                            <button class="btn btn-danger"
+                                    @onclick="(() => DeleteProgramBranch(programBranch))">
+                                Delete
+                            </button>
+                            <button class="btn btn-info"
+                                    @onclick="(() => EditProgramBranch(programBranch.Id))">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>*@
     <div>
         <button class="btn btn-success" @onclick="CreateProgramBranch">Create Program Branch</button>
     </div>
@@ -49,7 +58,7 @@ else
 
 
 @code {
-    private List<ProgramBranch>programBranches;
+    private List<ProgramBranch> programBranches;
 
     protected override async Task OnInitializedAsync()
     {

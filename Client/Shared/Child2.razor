@@ -1,0 +1,44 @@
+﻿@typeparam TItem
+
+
+<th scope="col" style="border: solid;">
+    <div style="display: flex; flex-direction: column; border: solid;">
+        <div style="border: solid;">
+            @Name
+        </div>
+
+        <div style="border: solid;">
+            @if (Filterable)
+            {
+                <input />
+            }
+            else
+            {
+                <div style="padding-top: 29px;"></div>
+            }
+        </div>
+    </div>
+</th>
+
+
+@code {
+    [CascadingParameter]
+    public Child1<TItem> Table { get; set; }
+
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public List<TItem> items { get; set; }
+
+    [Parameter]
+    public bool Filterable { get; set; }
+
+
+    private void ChangeParentProperty()
+    {
+        Table.doSomething(Name);
+        StateHasChanged();
+    }
+
+}
