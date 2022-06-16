@@ -1,38 +1,37 @@
 ﻿@typeparam TItem
-   
-@if(Columns != null)
-            {
-                <CascadingValue Value="this.myTable">
-                    <CascadingValue Value="this">
-                        @Columns
-                    </CascadingValue>
-                </CascadingValue>
-            }
-        @*<td>
+
+@if (Columns != null)
+{
+    <CascadingValue Value="this.myTable">
+        <CascadingValue Value="this">
+            <td>@ColumnTitle</td>
+        </CascadingValue>
+    </CascadingValue>
+}
+@*<td>
 
             @ColumnTitle
-      
-   
 
-   
+
+
+
         @if (filterable)
         {
-       
+
                 <input class="col-md-10" type="search" placeholder="filter" @oninput="OnSearchTextChanged" />
                 <button class="btn col-md-1">On</button>
                 <button class="btn col-md-1">Off</button>
-          
+
         }
     </td>*@
 
-    @code {
+@code {
 
+    //[Parameter]
+    //public string Field { get; set; }
 
-        //[Parameter]
-        //public string Field { get; set; }
+    //[CascadingParameter] private TableComponent<TItem> Parent { get; set; }
 
-        //[CascadingParameter] private TableComponent<TItem> Parent { get; set; }
-
-        //protected override void OnInitialized()
-        //    => Parent.AddItem();
-    }
+    //protected override void OnInitialized()
+    //    => Parent.AddItem();
+}

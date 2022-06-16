@@ -8,9 +8,7 @@
         <thead>
             <tr>
                 @ChildContent
-
             </tr>
-
         </thead>
         <tbody>
             @foreach (var item in Items)
@@ -33,27 +31,16 @@
             }
         </tbody>
     </table>
-
-
-
 </CascadingValue>
 
 
 @*<button @onclick="doSomething(child1String)"></button>*@
 
 @code {
-    private string child1String = "1";
-    public string something = "something";
-
     [Parameter]
     public RenderFragment ChildContent { get; set; }
 
     [Parameter]
     public List<TItem> Items { get; set; }
 
-    public void doSomething(string toAppend)
-    {
-        something += toAppend;
-        StateHasChanged();
-    }
 }

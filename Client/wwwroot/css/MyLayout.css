@@ -1,0 +1,294 @@
+﻿/*@charset "UTF-8";*/
+/* CSS Document */
+/*body {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: .8em;
+    line-height: 1.5;
+    margin: 0px;
+    padding: 20px;
+    color: #555;
+    background-color: #6699FF;
+}
+
+p {
+    color: #000000;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 1em;
+    margin: 0px 0px 1em 0px;
+    line-height: 1.5;
+    overflow: hidden;
+}
+
+h1 {
+    font-size: 2em;
+    color: #2f3134;
+    margin: 0px 0px .5em 0px;
+    font-weight: normal;
+}
+
+h2 {
+    font-size: 1.6em;
+    color: #2f3134;
+    margin: 0px 0px .5em 0px;
+    font-weight: normal;
+}
+
+h3 {
+    font-size: 1.25em;
+    color: #2f3134;
+    margin: 0em 0em .25em 0em;
+}
+
+li {
+    margin: 0px 0px 10px 0px;
+}
+
+a img {
+    border: none;
+}
+
+a {
+    color: #f52d1b;
+}
+
+    a:hover {
+        color: #00a2ed;
+    }
+
+aside h3 {
+    color: #404143;
+    margin-bottom: 10px;
+}
+
+aside p, .content_sidebar li {
+    color: #404143;
+}
+
+aside a {
+    color: #00a2ed;
+}
+
+    aside a:hover {
+        color: #f52d1b;
+    }
+
+main {
+    position: relative;
+    top: 100px;
+    max-width: 980px;*/
+    /*font-size: 1em;*/
+    /*margin-bottom: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0px;
+}
+
+    main header {
+        display: block;
+        height: 144px;
+        background: url(../images/banner_large.png) no-repeat 0px 0px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+    }
+
+        main header p {
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 45px;
+            position: absolute;
+            top: -80px;
+            left: 5px;
+            font-weight: lighter;
+            text-shadow: 3px 3px 2px #999;
+        }
+
+    main .page_content {
+        background-color: #fff;
+        padding: 1px 0px 1px 0px;
+    }
+
+        main .page_content .page_content_container_left {
+            width: 65%;
+            float: left;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        main .page_content .page_content_container_right {
+            width: 25%;
+            float: left;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        main .page_content .content {
+            margin: 15px 20px 20px 20px;
+            padding: 0px;
+        }
+
+        main .page_content aside {
+            margin: 15px 20px 20px 0px;
+            padding: 10px;
+            border: 1px solid #333;
+            background: #e7e7e7;
+            min-width: 250px;
+            box-shadow: 4px 8px 14px rgba(53, 50, 50, 0.75);
+        }
+
+    main nav {
+        position: absolute;
+        top: -60px;
+        right: 10px;
+    }
+
+        main nav a {
+            color: #ffffff;
+            padding: 7px 20px 7px 20px;
+            text-decoration: none;
+            font-weight: lighter;
+            font-style: italic;
+            display: inline-block;
+            margin: 0px 2px 2px 2px;
+            background-color: #4C4D4E;
+            font-size: 1.15em;
+            box-shadow: 4px 8px 14px rgba(53, 50, 50, 0.75);
+            transform: skew(14deg);
+        }
+
+            main nav a:hover {
+                background-color: rgba(140,141,143,.5);
+                color: #000;
+            }
+
+    main footer {
+        display: block;
+        text-align: center;
+        border-top: 1px solid #ddd;
+        padding: 15px 10px 15px 20px;
+        font-size: .9em;
+        color: #757575;
+        background-color: #fff;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        box-shadow: 0px 5px 3px rgba(0,0,0,0.3);
+    }
+
+.clear_both {
+    clear: both;
+    line-height: 1px;
+}
+
+@media screen and (min-width: 150px) and (max-width: 500px) {
+    body {
+        padding: 10px;
+    }
+
+    main {
+        top: 5px;
+        margin: 0px;
+        padding: 0px;
+        font-size: 1.2em
+    }
+
+        main header {
+            height: 66px;
+            background-image: url(../images/banner_small.png);
+        }
+
+            main header p {
+                visibility: hidden;
+            }
+
+        main .page_content .page_content_container_left {
+            width: inherit;
+            float: none;
+            margin: 0px;
+        }
+
+        main .page_content .page_content_container_right {
+            width: inherit;
+            float: none;
+            margin: 0px;
+        }
+
+        main .page_content .content {
+            margin: 260px 10px 20px 10px;
+        }
+
+        main .page_content aside {
+            margin: 0px 10px 15px 10px;
+        }
+
+        main .page_content .content_sidebar figure {
+            width: 30%;
+            float: center;
+            margin-left: 15px;
+        }
+
+        main nav {
+            top: 60px;
+            left: 10px;
+            padding: 15px 0px 1px 0px;
+            text-align: left;
+        }
+
+            main nav a {
+                padding: 7px 10px 7px 10px;
+                font-weight: bold;
+                font-size: 1em;
+                display: block;
+                margin: 0px 10px 15px 10px;
+                background: #4C4D4E url(../images/mobile_link_arrow.png) no-repeat right 90%;
+            }
+
+        main footer {
+            font-size: .8em;
+        }
+}
+
+@media screen and (min-width: 501px) and (max-width: 800px) {
+    main .deskHeader {
+        top: -88px;
+        left: -394px;
+    }
+
+    body {
+        padding: 10px;
+    }
+
+    main {
+        top: 55px;
+        margin: 0px;
+        padding: 0px;
+        font-size: 1.15em;
+        color: #000;
+    }
+
+        main header {
+            height: 106px;
+            backgroundimage: url(../images/banner_medium.png);
+        }
+
+            main header p {
+                font-size: 35px;
+                position: absolute;
+                top: -50px;
+            }
+
+        main nav {
+            top: 30px;
+        }
+
+            main nav a {
+                margin-left: 10px;
+                padding: 5px 10px 5px 10px;
+                font-size: .9em;
+            }
+
+        main .page_content .page_content_container_left {
+            width: 50%;
+        }
+
+        main .page_content .page_content_container_right {
+            width: 25%;
+        }
+}*/

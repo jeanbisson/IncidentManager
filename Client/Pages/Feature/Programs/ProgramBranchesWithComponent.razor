@@ -14,31 +14,31 @@ else
 
     var columns = new List<string>();
 <TableComponent Title="Program Branches with component" Items="programBranchesToDisplay" TItem="ProgramBranch" Context="ProgramBranch">
-    <Columns>
-        <Column ColumnTitle="Id"
+    @*<Columns>*@
+        @*<Column ColumnTitle="Id"
                 filterable="true"
                 TItem="ProgramBranch">
-        </Column>
-        <Column ColumnTitle="Name"
+        </Column>*@
+        @*<Column ColumnTitle="Name"
                 filterable="true"
                 TItem="ProgramBranch">
         </Column>
         <Column ColumnTitle="Abbreviation"
                 filterable="true"
                 TItem="ProgramBranch">
-        </Column>
+        </Column>*@
         @*<Column ColumnTitle="Actions" filterable="false"
                 TItem="ProgramBranch">
         </Column>*@
 
-    </Columns>
+    @*</Columns>*@
 
     <GridRow Context="ProgramBranch">
         <td>@ProgramBranch.Id</td>
         <td>@ProgramBranch.Name</td>
         <td>@ProgramBranch.Abr</td>
-        <td>
-            <button class="btn btn-info"
+        <td style="vertical-align:middle; text-align:center;">
+            <button class="btn btn-info"  
                     @onclick="(() => EditIncident(ProgramBranch.Id))">
                 Edit
             </button>
@@ -54,10 +54,10 @@ else
     private Dictionary<string, string> FilterList = new Dictionary<string, string>();
 
 
+  
     protected override async Task OnInitializedAsync()
     {
         programBranchesToDisplay = programBranches = await Http.GetFromJsonAsync<List<ProgramBranch>>("/api/ProgramBranch");
-
     }
 
     private void OnFilterTextChanged(ChangeEventArgs changeEventArgs, string columnTitle)

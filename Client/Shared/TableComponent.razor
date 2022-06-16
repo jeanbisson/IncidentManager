@@ -6,29 +6,42 @@
 
 <h3>@Title</h3>
 
-
 @if (ItemsToDisplay == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
+    <table class="table" style="margin-top: 40px;">
         <thead>
-            <tr>
-                    <CascadingValue Value="this">
-                        @Columns
-                    </CascadingValue>
-                </tr>
+            @*<tr>
+                <CascadingValue Value="this">
+                    @Columns
+                </CascadingValue>
+            </tr>*@
             <tr>
                 @foreach (var member in info)
                 {
-                    if (member.MemberType == MemberTypes.Property && columnDetails.Where(c => c.Name.Contains(@member.Name)).Count() > 0)
+                    if (member.MemberType == MemberTypes.Property) //&& columnDetails.Where(c => c.Name.Contains(@member.Name)).Count() > 0
                     {
-
-                        <th><input id="@(member.Name + "Filter")" type="search" @oninput="@(e => OnFilterTextChanged(e, @member.Name))" /></th>
+                        <th>@member.Name</th>
                     }
                 }
+                <th style="vertical-align:middle; text-align:center;">Actions</th>
+
+            </tr>
+
+            <tr>
+
+                @foreach (var member in info)
+                {
+                    if (member.MemberType == MemberTypes.Property) //&& columnDetails.Where(c => c.Name.Contains(@member.Name)).Count() > 0
+                    {
+                        <td><input id="@(member.Name + "Filter")" type="search" @oninput="@(e => OnFilterTextChanged(e, @member.Name))" /></td>
+                    }
+                }
+                <td style="vertical-align:middle; text-align:center; ">N/A</td>
+
             </tr>
 
         </thead>
@@ -101,16 +114,16 @@ else
 
         }
 
-        if(firstRender)
+        if (firstRender)
         {
             firstRender = false;
-        @foreach (var member in info)
-        {
-            if (member.MemberType == MemberTypes.Property)
+            @foreach (var member in info)
             {
-                Filters.Add(@member.Name, "");
+                if (member.MemberType == MemberTypes.Property)
+                {
+                    Filters.Add(@member.Name, "");
+                }
             }
-        }
         }
     }
 
@@ -120,17 +133,18 @@ else
         Filters[columnTitle] = searchText;
 
 
-        @*@foreach (var member in info)
-            {
+        @*@foreach(var member in info)
+                {
                 if (member.MemberType == MemberTypes.Property)
                 {
 
 
-                    <th><input id="@(member.Name + "Filter")" type="search" oninput="@(e => OnFilterTextChanged(e, @member.Name))" /></th>
+                    < th >< input id = "@(member.Name + "Filter")" type = "search" oninput = "@(e => OnFilterTextChanged(e, @member.Name))" /></ th >
 
 
                 }
-            }*@
+            }
+        *@
 
         //        for (int i = 0; i < Filters.Count; i++)
         //        {
@@ -149,7 +163,8 @@ else
 
                 if (filter.Key == "Id")
                 {
-                    query = query.Where("a => a." + filter.Key.ToString() + ".Contains(@0)", 0);
+                    var cc = filter.Value.ToLower();
+                    query = query.Where("a => a." + filter.Key + ".ToString()" + ".Contains(@0)", filter.Value);
 
                 }
                 //Where(a => a.Id.ToString().Contains(filter.Value)).ToList();
@@ -180,4 +195,4 @@ else
 
     }
 }
-}
+

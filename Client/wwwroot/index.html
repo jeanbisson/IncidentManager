@@ -7,6 +7,7 @@
     <title>IncidentManager</title>
     <base href="/" />
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/MyLayout.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
 </head>
 
@@ -19,6 +20,11 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+    <!-- This is the glue between Blazor and Chart.js -->
+    <script src="_content/ChartJs.Blazor.Fork/ChartJsBlazorInterop.js"></script>
 </body>
 
 </html>

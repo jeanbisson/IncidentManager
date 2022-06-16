@@ -13,66 +13,101 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Role</th>
-                <th>Program Branch</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var profile in profiles)
-            {
-            <tr>
-                <td>@profile.Id</td>
-                <td>@profile.FirstName @profile.LastName</td>
-                <td>@profile.Role</td>
-                <td>@profile.ProgramBranchName</td>
-                <td>
-                    <button class="btn btn-danger"
-                            @onclick="(() => DeleteProfile(profile))">
-                        Delete
-                    </button>
-                    <button class="btn btn-info"
-                            @onclick="(() => EditProfile(profile.Id))">
-                        Edit
-                    </button>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
+    @*<table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Program Branch</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var profile in profiles)
+                {
+                <tr>
+                    <td>@profile.Id</td>
+                    <td>@profile.FirstName @profile.LastName</td>
+                    <td>@profile.Role</td>
+                    <td>@profile.ProgramBranchName</td>
+                    <td>
+                        <button class="btn btn-danger"
+                                @onclick="(() => DeleteProfile(profile))">
+                            Delete
+                        </button>
+                        <button class="btn btn-info"
+                                @onclick="(() => EditProfile(profile.Id))">
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>*@
+
+    <Chart Config="_config"></Chart>
+
     <div>
         <button class="btn btn-success" @onclick="CreateProfile">Create Profile</button>
     </div>
 }
 
 
+
 @code {
-    private List<Profile> profiles;
+    //private List<Profile> profiles;
 
-    protected override async Task OnInitializedAsync()
-    {
-        profiles = await Http.GetFromJsonAsync<List<Profile>>("/api/Profile");
-    }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    profiles = await Http.GetFromJsonAsync<List<Profile>>("/api/Profile");
 
-    private async Task DeleteProfile(Profile profile)
-    {
-        await Http.DeleteAsync($"/api/Profile/{profile.Id}");
-        profiles.Remove(profile);
-        StateHasChanged();
-    }
+    //     _config = new PieConfig
+    //{
+    //    Options = new PieOptions
+    //    {
+    //        Responsive = true,
+    //        Title = new OptionsTitle
+    //        {
+    //            Display = true,
+    //            Text = "ChartJs.Blazor Pie Chart"
+    //        }
+    //    }
+    //};
 
-    private void EditProfile(int profileId)
-    {
-        Navigation.NavigateTo("/editprofile/" + profileId);
-    }
+    //foreach (string color in new[] { "Red", "Yellow", "Green", "Blue" })
+    //{
+    //    _config.Data.Labels.Add(color);
+    //}
 
-    private void CreateProfile()
-    {
-        Navigation.NavigateTo("/createprofile");
-    }
+    //PieDataset<int> dataset = new PieDataset<int>(new[] { 6, 5, 3, 7 })
+    //{
+    //    BackgroundColor = new[]
+    //    {
+    //        ColorUtil.ColorHexString(255, 99, 132), // Slice 1 aka "Red"
+    //        ColorUtil.ColorHexString(255, 205, 86), // Slice 2 aka "Yellow"
+    //        ColorUtil.ColorHexString(75, 192, 192), // Slice 3 aka "Green"
+    //        ColorUtil.ColorHexString(54, 162, 235), // Slice 4 aka "Blue"
+    //    }
+    //};
+
+    //_config.Data.Datasets.Add(dataset);
+    //}
+
+    //private async Task DeleteProfile(Profile profile)
+    //{
+    //    await Http.DeleteAsync($"/api/Profile/{profile.Id}");
+    //    profiles.Remove(profile);
+    //    StateHasChanged();
+    //}
+
+    //private void EditProfile(int profileId)
+    //{
+    //    Navigation.NavigateTo("/editprofile/" + profileId);
+    //}
+
+    //private void CreateProfile()
+    //{
+    //    Navigation.NavigateTo("/createprofile");
+    //}
 
 }
